@@ -8,28 +8,19 @@
     <script type="module" src="/build/adaptivecard-component.esm.js"></script>
     <script nomodule src="/build/adaptivecard-component.js"></script>
     <script type="text/javascript" src="https://unpkg.com/markdown-it/dist/markdown-it.js"></script>
-
-    <script type="text/javascript">
-
-      function BeforeSubmit(data) {
-        console.log(data);
-      }
-
-    </script>
   </head>
   <body>
     <p>Adaptive Card unconfigured</p>
-    <adaptive-card 
-    elementKey='cardUnconfigured'>
+    <adaptive-card
+    id="card1"
+    element-key='card1'>
     </adaptive-card>
 
     <p>Adaptive Card by Id</p>
     <adaptive-card 
       mode='dark'
       element-key="cardById" 
-      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb"
-      before-submit=BeforeSubmit>
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb">
     </adaptive-card> 
-
   </body>
 </html>

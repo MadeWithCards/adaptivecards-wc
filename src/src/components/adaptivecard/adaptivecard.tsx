@@ -13,7 +13,8 @@ import dark from './assets/dark.json';
   styleUrl: 'adaptivecard.scss',
   shadow: false,
 })
-export class MyComponent {
+export class AdaptiveCardWC {
+
 
   // All options, properties blabla
   @Prop() href?: string;
@@ -24,8 +25,6 @@ export class MyComponent {
   @Prop() templateId?;
   @Prop() beforeSubmit?: Function;
   @Prop() afterSubmit?: Function;
-
-
   @Event() cardInputChanged: EventEmitter<Input>;
   @Event() cardSubmit: EventEmitter<Action>;
 
@@ -40,16 +39,24 @@ export class MyComponent {
   public divElement!: HTMLElement
 
   private handleCardSubmit(base, action) {
+    console.log('HandleSubmit--->')
     base.cardSubmit.emit(action);
-    if(!base.beforeSubmit) 
-
+    console.log(base);
+    console.log(action);
+    console.log(base.beforeSubmit);
+    console.log(base.afterSubmit);
     if(base.beforeSubmit) {
-      const result = this.beforeSubmit(action);
+      const result = base.beforeSubmit(action);
       base.cardSubmit.emit(action);
       if(result) {
         if(base.afterSubmit) this.afterSubmit(result);
       }
     }
+  }
+
+
+  private getCard() {
+    console.info("AC->Getting Card Configuration")
   }
 
   private renderCard() {
@@ -81,9 +88,17 @@ export class MyComponent {
 
   componentWillLoad() {
     console.log("AC: Component Will Load")
+
+
+
   }
 
   componentDidLoad() {
+
+    // Get card data from API
+    this.getCard();
+
+
     // Initialize adaptive card stuff
     let config: HostConfig;
     if( this.mode == null || this.mode != null && this.mode === 'light') {

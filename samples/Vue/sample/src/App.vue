@@ -1,20 +1,57 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <adaptive-card 
+      mode='dark' 
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
+      :before-submit="beforeSubmit"
+      :after-submit="afterSubmit"
+      @cardSubmit="submitCard" />
+
+    <adaptive-card 
+      mode='dark' 
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
+      :before-submit="beforeSubmit"
+      :after-submit="afterSubmit"
+      @cardSubmit="submitCard" />
+
+
+     <adaptive-card 
+      mode='dark' 
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
+      :beforeSubmit="beforeSubmit"
+      :afterSubmit="afterSubmit"
+      @cardSubmit="submitCard" />
+
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
+@Component({})
+export default class App extends Vue {
+
+  mounted() {
+    this.beforeSubmit({bbb:"23434"});
+    this.afterSubmit({aaa:"123"});
+  }
+
+  submitCard(data: any) {
+    console.log(data)
+  }
+
+  beforeSubmit(data: any): boolean {
+    console.log(data);
+    return true;
+  }
+
+  afterSubmit(data: any): boolean {
+    console.log(data);
+    return true;
+  }
+
+}
 </script>
 
 <style>

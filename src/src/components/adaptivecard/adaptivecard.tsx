@@ -17,16 +17,35 @@ export class AdaptiveCardWC {
 
 
   // All options, properties blabla
-  @Prop() href?: string;
-  @Prop() elementKey?: string;
-  @Prop() mode = 'light';
-  @Prop() template?;
-  @Prop() data?: string | object = {}
-  @Prop() templateId?;
-  @Prop() beforeSubmit?: Function;
-  @Prop() afterSubmit?: Function;
-  @Event() cardInputChanged: EventEmitter<Input>;
-  @Event() cardSubmit: EventEmitter<Action>;
+  @Prop() 
+  public href?: string;
+  
+  @Prop() 
+  public elementKey?: string;
+
+  @Prop() 
+  public mode = 'light';
+
+  @Prop() 
+  public template?;
+
+  @Prop() 
+  public data?: string | object = {}
+
+  @Prop() 
+  public templateId?;
+
+  @Prop() 
+  public before?: (data) => void;
+
+  @Prop() 
+  public after?: (data) => void;
+
+  @Event() 
+  public cardInputChanged: EventEmitter<Input>;
+
+  @Event() 
+  public cardSubmit: EventEmitter<Action>;
 
   // The main element
   @Element() private element: HTMLElement;
@@ -36,21 +55,24 @@ export class AdaptiveCardWC {
   private cardTemplate;
   public htmlResult;
 
-  public divElement!: HTMLElement
+  public loader!: HTMLElement
 
   private handleCardSubmit(base, action) {
-    console.log('HandleSubmit--->')
-    base.cardSubmit.emit(action);
+
     console.log(base);
     console.log(action);
-    console.log(base.beforeSubmit);
-    console.log(base.afterSubmit);
-    if(base.beforeSubmit) {
-      const result = base.beforeSubmit(action);
+
+    // Throw normal event if before+after not set
+    if(!base.before && !base.after) {
       base.cardSubmit.emit(action);
-      if(result) {
-        if(base.afterSubmit) this.afterSubmit(result);
+    }
+
+    if(base.before) {
+      const result = base.before(action);
+      if( result ) {
+        if(base.afterSubmit) this.after(result);
       }
+
     }
   }
 
@@ -85,14 +107,6 @@ export class AdaptiveCardWC {
     this.element.appendChild(cardParsed);
   }
 
-
-  componentWillLoad() {
-    console.log("AC: Component Will Load")
-
-
-
-  }
-
   componentDidLoad() {
 
     // Get card data from API
@@ -114,6 +128,7 @@ export class AdaptiveCardWC {
       console.warn('AdaptiveCards-> No Template set please set either href, templateId or template')
       this.cardTemplate = sampleCard;
       this.renderCard();
+      this.loader.remove();
       return;
     }
 
@@ -122,6 +137,7 @@ export class AdaptiveCardWC {
       axios.get(this.href).then(result => {
         this.cardTemplate = result.data.template;
         this.renderCard();
+        this.loader.remove();
         return;
       })
     }
@@ -132,6 +148,7 @@ export class AdaptiveCardWC {
       axios.get(`https://api.madewithcards.io/cards/${this.templateId}`).then(result => {
         this.cardTemplate = result.data.template;
         this.renderCard();
+        this.loader.remove();
         return;
       }) 
     }
@@ -140,8 +157,8 @@ export class AdaptiveCardWC {
   // Render the actual card and apply events
   render() {
     return (
-      <div ref={(el) => this.divElement= el as HTMLElement}>
-        Loading Adaptive Card
+      <div ref={(el) => this.loader= el as HTMLElement}>
+        <div class="loader">Loading...</div>
       </div>
     );
   }

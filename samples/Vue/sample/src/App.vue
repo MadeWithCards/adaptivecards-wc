@@ -2,25 +2,9 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <adaptive-card 
-      mode='dark' 
+      mode='dark'
+      ref="card1"
       template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
-      :before-submit="beforeSubmit"
-      :after-submit="afterSubmit"
-      @cardSubmit="submitCard" />
-
-    <adaptive-card 
-      mode='dark' 
-      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
-      :before-submit="beforeSubmit"
-      :after-submit="afterSubmit"
-      @cardSubmit="submitCard" />
-
-
-     <adaptive-card 
-      mode='dark' 
-      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
-      :beforeSubmit="beforeSubmit"
-      :afterSubmit="afterSubmit"
       @cardSubmit="submitCard" />
 
   </div>
@@ -32,13 +16,16 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({})
 export default class App extends Vue {
 
+
   mounted() {
-    this.beforeSubmit({bbb:"23434"});
-    this.afterSubmit({aaa:"123"});
+    var card = this.$refs["card1"];
+    console.log(card);
+    card.beforeSubmit = this.beforeSubmit;
+    card.afterSubmit = this.afterSubmit;
   }
 
   submitCard(data: any) {
-    console.log(data)
+    alert(data)
   }
 
   beforeSubmit(data: any): boolean {

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+
+    <script type="module" src="/build/adaptivecard-component.esm.js"></script>
+    <script nomodule src="/build/adaptivecard-component.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/markdown-it/dist/markdown-it.js"></script>
+
+    <script type="text/javascript">
+
+      function BeforeSubmit(data) {
+        console.log(data);
+      }
+
+    </script>
+  </head>
+  <body>
+    <p>Adaptive Card unconfigured</p>
+    <adaptive-card 
+    elementKey='cardUnconfigured'>
+    </adaptive-card>
+
+    <p>Adaptive Card by Id</p>
+    <adaptive-card 
+      mode='dark'
+      element-key="cardById" 
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb"
+      before-submit=BeforeSubmit>
+    </adaptive-card> 
+
+  </body>
+</html>

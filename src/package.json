@@ -1,0 +1,44 @@
+{
+  "name": "@madewithcards/adaptivecards-wc",
+  "version": "0.2.1",
+  "homepage": "https://www.madewithcards.io",
+  "bugs": {
+    "url": "https://github.com/madewithcards/adaptivecards-wc/issues",
+    "email": "tim@madewithcards.io"
+  },
+  "author": {
+    "email": "tim@madewithcards.io",
+    "url": "https://www.madewithcards.io",
+    "name": "Tim Cadenbach"
+  },
+  "displayName": "AdaptiveCards WebComponent",
+  "keywords": ["AdaptiveCards", "WebComponent", "Stencil"],
+  "description": "Render AdaptiveCards, as simple as image. Use Cards as small microfrontends or widgets",
+  "main": "dist/index.cjs.js",
+  "module": "dist/custom-elements/index.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/custom-elements/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/adaptivecard-component/adaptivecard-component.esm.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "generate": "stencil generate"
+  },
+  "dependencies": {
+    "@stencil/core": "^2.0.1",
+    "adaptive-expressions": "^4.12.0",
+    "adaptivecards": "^2.8.0",
+    "adaptivecards-templating": "^2.1.0",
+    "axios": "^0.21.1"
+  },
+  "license": "MIT"
+}

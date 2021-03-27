@@ -8,12 +8,13 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Action, Input } from "adaptivecards";
 export namespace Components {
     interface AdaptiveCard {
-        "afterSubmit"?: Function;
-        "beforeSubmit"?: Function;
+        "afterSubmit"?: (data) => void;
+        "beforeSubmit"?: (data) => void;
         "data"?: string | object;
         "elementKey"?: string;
         "href"?: string;
         "mode": string;
+        "submitTarget"?: string;
         "template"?: any;
         "templateId"?: any;
     }
@@ -31,14 +32,16 @@ declare global {
 }
 declare namespace LocalJSX {
     interface AdaptiveCard {
-        "afterSubmit"?: Function;
-        "beforeSubmit"?: Function;
+        "afterSubmit"?: (data) => void;
+        "beforeSubmit"?: (data) => void;
         "data"?: string | object;
         "elementKey"?: string;
         "href"?: string;
         "mode"?: string;
+        "onCardAfterSubmit"?: (event: CustomEvent<Action>) => void;
         "onCardInputChanged"?: (event: CustomEvent<Input>) => void;
         "onCardSubmit"?: (event: CustomEvent<Action>) => void;
+        "submitTarget"?: string;
         "template"?: any;
         "templateId"?: any;
     }

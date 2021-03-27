@@ -4,7 +4,9 @@
     <adaptive-card 
       mode='dark'
       ref="card1"
-      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb" 
+      template-id="5409bd9a-6e2c-4a4b-869a-af7fabd4cbcb"
+      :before-submit="beforeSubmit"
+      :after-submit="afterSubmit"
       @cardSubmit="submitCard" />
 
   </div>
@@ -15,14 +17,6 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 export default class App extends Vue {
-
-
-  mounted() {
-    var card = this.$refs["card1"];
-    console.log(card);
-    card.beforeSubmit = this.beforeSubmit;
-    card.afterSubmit = this.afterSubmit;
-  }
 
   submitCard(data: any) {
     alert(data)

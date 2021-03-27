@@ -7,6 +7,12 @@ import axios from 'axios';
 import sampleCard from './assets/exampleCard.json';
 import light from './assets/light.json';
 import dark from './assets/dark.json';
+import outlook from './assets/outlook-desktop.json';
+import skype from './assets/skype.json';
+import cortanaLight from './assets/cortana-skills-light.json';
+import cortanaDark from './assets/cortana-skills-dark.json';
+
+
 
 @Component({
   tag: 'adaptive-card',
@@ -36,16 +42,22 @@ export class AdaptiveCardWC {
   public templateId?;
 
   @Prop() 
-  public before?: (data) => void;
+  public beforeSubmit?: (data) => void;
 
   @Prop() 
-  public after?: (data) => void;
+  public afterSubmit?: (data) => void;
+
+  @Prop()
+  public submitTarget?: string;
 
   @Event() 
   public cardInputChanged: EventEmitter<Input>;
 
   @Event() 
   public cardSubmit: EventEmitter<Action>;
+
+  @Event() 
+  public cardAfterSubmit: EventEmitter<Action>;
 
   // The main element
   @Element() private element: HTMLElement;
@@ -57,25 +69,39 @@ export class AdaptiveCardWC {
 
   public loader!: HTMLElement
 
-  private handleCardSubmit(base, action) {
+  private handleCardSubmit(base, action: Action) {
 
     console.log(base);
     console.log(action);
 
+    if(this.submitTarget) {
+      axios.post(this.submitTarget, base.data).then(result => {
+        base.cardAfterSubmit.emit(base,result);
+      })
+    }
+
+    if(!base.beforeSubmit && !base.afterSubmit) {
+      this.cardSubmitInternal();
+    }
+
     // Throw normal event if before+after not set
-    if(!base.before && !base.after) {
+    if(!base.beforeSubmit && !base.afterSubmit) {
       base.cardSubmit.emit(action);
     }
 
-    if(base.before) {
-      const result = base.before(action);
+    if(base.beforeSubmit) {
+      const result = base.beforeSubmit(action);
       if( result ) {
-        if(base.afterSubmit) this.after(result);
+        if(base.afterSubmit) this.afterSubmit(result);
       }
 
     }
   }
 
+
+  private cardSubmitInternal() {
+    console.info("Submitting Adaptive Card")
+  }
 
   private getCard() {
     console.info("AC->Getting Card Configuration")
@@ -104,6 +130,7 @@ export class AdaptiveCardWC {
 
     // Attach the card to the container
     this.element.innerHTML = "";
+    console.log(this.element);
     this.element.appendChild(cardParsed);
   }
 
@@ -115,11 +142,21 @@ export class AdaptiveCardWC {
 
     // Initialize adaptive card stuff
     let config: HostConfig;
-    if( this.mode == null || this.mode != null && this.mode === 'light') {
-      config = new HostConfig(light)
-    } else{
-      config = new HostConfig(dark)
+    if( this.mode == null || this.mode != null ) {
+      switch(this.mode) {
+        case 'light': config = new HostConfig(light) 
+        case 'dark': config = new HostConfig(dark) 
+        case 'outlook': config = new HostConfig(outlook) 
+        case 'skype': config = new HostConfig(skype) 
+        case 'cortanaLight': config = new HostConfig(cortanaLight) 
+        case 'cortanaDark': config = new HostConfig(cortanaDark) 
+      }
     }
+
+
+
+
+
     this.cardHolder = new AdaptiveCard()
     this.cardHolder.hostConfig = config;
 

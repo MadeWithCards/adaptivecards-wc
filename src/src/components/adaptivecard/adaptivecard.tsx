@@ -5,8 +5,8 @@ import axios from 'axios';
 
 // Cards && Sample Data
 import sampleCard from './assets/exampleCard.json';
-import light from './assets/light.json';
-import dark from './assets/dark.json';
+import light from './assets/microsoft-teams-light.json';
+import dark from './assets/microsoft-teams-dark.json';
 import outlook from './assets/outlook-desktop.json';
 import skype from './assets/skype.json';
 import cortanaLight from './assets/cortana-skills-light.json';
@@ -71,9 +71,6 @@ export class AdaptiveCardWC {
 
   private handleCardSubmit(base, action: Action) {
 
-    console.log(base);
-    console.log(action);
-
     if(this.submitTarget) {
       axios.post(this.submitTarget, base.data).then(result => {
         base.cardAfterSubmit.emit(base,result);
@@ -130,7 +127,6 @@ export class AdaptiveCardWC {
 
     // Attach the card to the container
     this.element.innerHTML = "";
-    console.log(this.element);
     this.element.appendChild(cardParsed);
   }
 
@@ -142,23 +138,41 @@ export class AdaptiveCardWC {
 
     // Initialize adaptive card stuff
     let config: HostConfig;
-    if( this.mode == null || this.mode != null ) {
+    if( this.mode != null ) {
       switch(this.mode) {
-        case 'light': config = new HostConfig(light) 
-        case 'dark': config = new HostConfig(dark) 
-        case 'outlook': config = new HostConfig(outlook) 
-        case 'skype': config = new HostConfig(skype) 
-        case 'cortanaLight': config = new HostConfig(cortanaLight) 
-        case 'cortanaDark': config = new HostConfig(cortanaDark) 
+        case 'light': 
+          config = new HostConfig(light)
+          break; 
+        case 'dark': 
+          config = new HostConfig(dark)           
+          break; 
+        case 'outlook': 
+          config = new HostConfig(outlook) 
+          break; 
+        case 'skype': 
+          config = new HostConfig(skype)
+          break; 
+        case 'cortanaLight': 
+          config = new HostConfig(cortanaLight)
+          break; 
+        case 'cortanaDark': 
+          config = new HostConfig(cortanaDark)
+          break; 
+        default:
+          config = new HostConfig(light)
+          break; 
       }
     }
 
-
-
-
-
     this.cardHolder = new AdaptiveCard()
     this.cardHolder.hostConfig = config;
+
+    if(this.template != null && this.template != '') {
+      this.cardTemplate = this.template;
+      this.renderCard();
+      this.loader.remove();
+      return;
+    }
 
     // Fallback to default card if nothing was passed
     if( !this.href && !this.templateId && !this.template) {
@@ -182,7 +196,7 @@ export class AdaptiveCardWC {
     // Render card by cardId (api.madewithcards)
 
     if(this.templateId != null && this.templateId != '') {
-      axios.get(`https://api.madewithcards.io/cards/${this.templateId}`).then(result => {
+      axios.get(`https://api.madewithcards.io/cards/id/${this.templateId}`).then(result => {
         this.cardTemplate = result.data.template;
         this.renderCard();
         this.loader.remove();
